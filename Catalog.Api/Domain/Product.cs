@@ -3,7 +3,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Catalog.Api.Domain;
 
-[Table("Product")]
+[Table("Products")]
 public class Product
 {
     [Key]

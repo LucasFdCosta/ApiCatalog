@@ -84,7 +84,7 @@ namespace Catalog.Api.Migrations
 
                     b.HasIndex("CategoryId");
 
-                    b.ToTable("Product");
+                    b.ToTable("Products");
                 });
 
             modelBuilder.Entity("Catalog.Api.Domain.Product", b =>

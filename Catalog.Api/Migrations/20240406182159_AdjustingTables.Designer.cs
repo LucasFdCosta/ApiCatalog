@@ -12,7 +12,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Catalog.Api.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20240406181510_AdjustingTables")]
+    [Migration("20240406182159_AdjustingTables")]
     partial class AdjustingTables
     {
         /// <inheritdoc />
@@ -87,7 +87,7 @@ namespace Catalog.Api.Migrations
 
                     b.HasIndex("CategoryId");
 
-                    b.ToTable("Product");
+                    b.ToTable("Products");
                 });
 
             modelBuilder.Entity("Catalog.Api.Domain.Product", b =>
