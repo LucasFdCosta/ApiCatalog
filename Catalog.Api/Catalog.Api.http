@@ -1,6 +1,49 @@
-@Catalog.Api_HostAddress = http://localhost:5034
+@apiUrl = https://localhost:7018
 
-GET {{Catalog.Api_HostAddress}}/weatherforecast/
+GET {{apiUrl}}/products
+Accept: application/json
+Content-Type: application/json
+
+###
+
+GET {{apiUrl}}/products/3
 Accept: application/json
 
 ###
+
+POST {{apiUrl}}/products
+Accept: application/json
+Content-Type: application/json
+
+{
+  "name": "Test",
+  "description": "test",
+  "price": 10,
+  "imageUrl": "test.jpg",
+  "stock": 10,
+  "CreatedAt": "2024-04-08T19:52:00.0000",
+  "categoryId": 1
+}
+
+###
+
+PUT {{apiUrl}}/products/4
+Accept: application/json
+Content-Type: application/json
+
+{
+  "id": 4,
+  "name": "Modified test",
+  "description": "modified test",
+  "price": 99,
+  "imageUrl": "test.jpg",
+  "stock": 9,
+  "CreatedAt": "2024-04-08T19:52:00.0000",
+  "categoryId": 1
+}
+
+###
+
+DELETE {{apiUrl}}/products/4
+Accept: application/json
+Content-Type: application/json
