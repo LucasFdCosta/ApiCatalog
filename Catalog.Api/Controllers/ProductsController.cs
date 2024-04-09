@@ -19,7 +19,7 @@ public class ProductsController : ControllerBase
     [HttpGet]
     public IActionResult Get()
     {
-        var products = _context.Products.ToList();
+        var products = _context.Products.AsNoTracking().ToList();
 
         if (products is null) return NotFound("No products found!");
 
