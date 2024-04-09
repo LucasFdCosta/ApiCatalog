@@ -47,3 +47,15 @@ Content-Type: application/json
 DELETE {{apiUrl}}/products/4
 Accept: application/json
 Content-Type: application/json
+
+###
+
+GET {{apiUrl}}/category/
+Accept: application/json
+Content-Type: application/json
+
+###
+
+GET {{apiUrl}}/category/products
+Accept: application/json
+Content-Type: application/json
