@@ -23,6 +23,7 @@ public class CategoryController : ControllerBase
     }
 
     [HttpGet]
+    [ServiceFilter(typeof(ApiLoggingFilter))]
     public IActionResult Get()
     {
         var category = _context.Categories.AsNoTracking().ToList();
