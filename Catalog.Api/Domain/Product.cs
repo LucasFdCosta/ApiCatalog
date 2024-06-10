@@ -1,4 +1,4 @@
-﻿using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Text.Json.Serialization;
 
@@ -10,8 +10,8 @@ public class Product
     [Key]
     public int Id { get; set; }
 
-    [Required]
-    [StringLength(80)]
+    [Required(ErrorMessage = "The 'name' is required")]
+    [StringLength(30, ErrorMessage = "The 'name' cannot have more than 30 characters")]
     public string Name { get; set; } = string.Empty;
 
     [Required]
@@ -20,6 +20,7 @@ public class Product
 
     [Required]
     [Column(TypeName = "decimal(10,2)")]
+[Range(1, 10000, ErrorMessage = "The 'price' has to be between {1} and {2}")]
     public decimal Price { get; set; }
 
     [Required]
