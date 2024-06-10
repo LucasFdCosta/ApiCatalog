@@ -1,5 +1,7 @@
-using Catalog.Api.Context;
+﻿using Catalog.Api.Context;
 using Catalog.Api.Domain;
+using Catalog.Api.Filters;
+using Catalog.Api.Services;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
@@ -10,10 +12,12 @@ namespace Catalog.Api.Controllers;
 public class CategoryController : ControllerBase
 {
     private readonly AppDbContext _context;
+    private readonly ILogger _ilogger;
 
-    public CategoryController(AppDbContext context)
+    public CategoryController(AppDbContext context, ILogger<CategoryController> ilogger)
     {
         _context = context;
+        _ilogger = ilogger;
     }
 
     [HttpGet("UsingFromServices/{name}")]
@@ -26,6 +30,8 @@ public class CategoryController : ControllerBase
     [ServiceFilter(typeof(ApiLoggingFilter))]
     public IActionResult Get()
     {
+        _ilogger.LogInformation($"============= GET api/category ===============");
+        
         var category = _context.Categories.AsNoTracking().ToList();
 
         if (category is null) return NotFound("No categories found");
@@ -36,9 +42,15 @@ public class CategoryController : ControllerBase
     [HttpGet("{id:int}", Name = "GetCategory")]
     public IActionResult GetById(int id)
     {
+        _ilogger.LogInformation($"============= GET api/category/id {id} ===============");
+        
         var category = _context.Categories.Find(id);
 
-        if (category is null) return NotFound("Category not found");
+        if (category is null)
+        {
+            _ilogger.LogInformation($"============= GET api/category/id {id} NOT FOUND =========");
+            return NotFound("Category not found");
+        };
 
         return Ok(category);
     }
@@ -47,6 +59,8 @@ public class CategoryController : ControllerBase
     [Route("Products")]
     public IActionResult GetCategoriesWithProducts()
     {
+        _ilogger.LogInformation($"============= GET api/category/products ===============");
+
         var categories = _context.Categories.Include(c => c.Products).ToList();
 
         if (categories is null) return NotFound("No categories found");
