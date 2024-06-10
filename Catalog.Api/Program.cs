@@ -18,6 +18,8 @@ builder.Services.AddDbContext<AppDbContext>(options =>
     options.UseMySql(mySqlConnection,
         ServerVersion.AutoDetect(mySqlConnection)));
 
+builder.Services.AddTransient<IMyService, MyService>();
+
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.

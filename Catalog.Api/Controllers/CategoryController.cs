@@ -1,4 +1,4 @@
-﻿using Catalog.Api.Context;
+using Catalog.Api.Context;
 using Catalog.Api.Domain;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -14,6 +14,12 @@ public class CategoryController : ControllerBase
     public CategoryController(AppDbContext context)
     {
         _context = context;
+    }
+
+    [HttpGet("UsingFromServices/{name}")]
+    public IActionResult GetHelloFromServices([FromServices] IMyService service, string name)
+    {
+        return Ok(service.Hello(name));
     }
 
     [HttpGet]
