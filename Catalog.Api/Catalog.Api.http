@@ -6,7 +6,7 @@ Content-Type: application/json
 
 ###
 
-GET {{apiUrl}}/products/3
+GET {{apiUrl}}/products/1
 Accept: application/json
 
 ###
@@ -16,12 +16,12 @@ Accept: application/json
 Content-Type: application/json
 
 {
-  "name": "Test",
-  "description": "test",
-  "price": 10,
-  "imageUrl": "test.jpg",
-  "stock": 10,
-  "CreatedAt": "2024-04-08T19:52:00.0000",
+  "name": "diet Coke 2",
+  "description": "Diet Coke 350ml",
+  "price": 5,
+  "imageUrl": "coke.jpg",
+  "stock": 50,
+  "createdAt": "2024-04-06T16:13:32",
   "categoryId": 1
 }
 
@@ -44,13 +44,19 @@ Content-Type: application/json
 
 ###
 
-DELETE {{apiUrl}}/products/4
+DELETE {{apiUrl}}/products/5
 Accept: application/json
 Content-Type: application/json
 
 ###
 
 GET {{apiUrl}}/category/
+Accept: application/json
+Content-Type: application/json
+
+###
+
+GET {{apiUrl}}/category/9
 Accept: application/json
 Content-Type: application/json
 
