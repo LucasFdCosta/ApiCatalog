@@ -17,19 +17,19 @@ public class ProductsController : ControllerBase
     }
 
     [HttpGet]
-    public IActionResult Get()
+    public async Task<IActionResult> Get()
     {
-        var products = _context.Products.AsNoTracking().ToList();
+        var products = await _context.Products.AsNoTracking().ToListAsync();
 
         if (products is null) return NotFound("No products found!");
 
         return Ok(products.ToList());
     }
 
-    [HttpGet("{id:int}", Name="GetProduct")]
-    public IActionResult GetById(int id)
+    [HttpGet("{id:int:min(1)}", Name="GetProduct")]
+    public async Task<IActionResult> GetById(int id)
     {
-        var product = _context.Products.Find(id);
+        var product = await _context.Products.FindAsync(id);
 
         if (product is null) return NotFound("Product not found!");
 
