@@ -1,6 +1,7 @@
 ﻿using Catalog.Api.Context;
 using Catalog.Api.Domain;
 using Catalog.Api.Filters;
+using Catalog.Api.Repositories;
 using Catalog.Api.Services;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -11,12 +12,12 @@ namespace Catalog.Api.Controllers;
 [ApiController]
 public class CategoryController : ControllerBase
 {
-    private readonly AppDbContext _context;
+    private readonly ICategoryRepository _repository;
     private readonly ILogger _ilogger;
 
-    public CategoryController(AppDbContext context, ILogger<CategoryController> ilogger)
+    public CategoryController(ICategoryRepository repository, ILogger<CategoryController> ilogger)
     {
-        _context = context;
+        _repository = repository;
         _ilogger = ilogger;
     }
 
@@ -32,11 +33,9 @@ public class CategoryController : ControllerBase
     {
         _ilogger.LogInformation($"============= GET api/category ===============");
         
-        var category = _context.Categories.AsNoTracking().ToList();
+        var categories = _repository.GetCategories();
 
-        if (category is null) return NotFound("No categories found");
-
-        return Ok(category);
+        return Ok(categories);
     }
 
     [HttpGet("{id:int}", Name = "GetCategory")]
@@ -44,39 +43,19 @@ public class CategoryController : ControllerBase
     {
         _ilogger.LogInformation($"============= GET api/category/id {id} ===============");
         
-        var category = _context.Categories.Find(id);
+        var category = _repository.GetCategory(id);
 
-        if (category is null)
-        {
-            _ilogger.LogInformation($"============= GET api/category/id {id} NOT FOUND =========");
-            return NotFound("Category not found");
-        };
-
-        return Ok(category);
-    }
-
-    [HttpGet]
-    [Route("Products")]
-    public IActionResult GetCategoriesWithProducts()
-    {
-        _ilogger.LogInformation($"============= GET api/category/products ===============");
-
-        var categories = _context.Categories.Include(c => c.Products).ToList();
-
-        if (categories is null) return NotFound("No categories found");
-
-        return Ok(categories);
+        return category is not null ? Ok(category) : NotFound($"Category {id} not found...");
     }
 
     [HttpPost]
     public IActionResult Post(Category category)
     {
-        if (category is null) return BadRequest();
+        if (category is null) return BadRequest("Invalid data.");
 
-        _context.Categories.Add(category);
-        _context.SaveChanges();
+        var created = _repository.Create(category);
 
-        return new CreatedAtRouteResult("GetCategory", new { id = category.Id }, category);
+        return new CreatedAtRouteResult("GetCategory", new { id = created.Id }, created);
     }
 
     [HttpPut("{id:int}")]
@@ -84,8 +63,7 @@ public class CategoryController : ControllerBase
     {
         if (id != category.Id) return BadRequest("Invalid ID");
 
-        _context.Entry(category).State = EntityState.Modified;
-        _context.SaveChanges();
+        _repository.Update(category);
 
         return Ok(category);
     }
@@ -93,13 +71,12 @@ public class CategoryController : ControllerBase
     [HttpDelete("{id:int}")]
     public IActionResult Delete(int id)
     {
-        var category = _context.Categories.Find(id);
+        var category = _repository.GetCategory(id);
 
         if (category is null) return NotFound("Category not found!");
 
-        _context.Categories.Remove(category);
-        _context.SaveChanges();
+        var deleted = _repository.Delete(id);
 
-        return Ok($"Deleted category {id}!");
+        return Ok(deleted);
     }
 }

@@ -19,12 +19,12 @@ namespace Catalog.Api.Repositories
 
         public IEnumerable<Category> GetCategories()
         {
-            return _context.Categories.ToList();
+            return _context.Categories.Include(c => c.Products).ToList();
         }
 
         public Category GetCategory(int id)
         {
-            return _context.Categories.FirstOrDefault(c => c.Id == id);
+            return _context.Categories.Include(c => c.Products).FirstOrDefault(c => c.Id == id);
         }
 
         public Category Create(Category category)

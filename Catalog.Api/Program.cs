@@ -2,6 +2,7 @@ using Catalog.Api.Context;
 using Catalog.Api.Extensions;
 using Catalog.Api.Filters;
 using Catalog.Api.Logging;
+using Catalog.Api.Repositories;
 using Catalog.Api.Services;
 using Microsoft.EntityFrameworkCore;
 using System.Text.Json.Serialization;
@@ -32,6 +33,8 @@ builder.Services.AddDbContext<AppDbContext>(options =>
 builder.Services.AddTransient<IMyService, MyService>();
 
 builder.Services.AddScoped<ApiLoggingFilter>();
+
+builder.Services.AddScoped<ICategoryRepository, CategoryRepository>();
 
 builder.Logging.AddProvider(new CustomLoggerProvider(new CustomLoggerProviderConfiguration
 {
