@@ -19,7 +19,7 @@ namespace Catalog.Api.Validation
 
             if (firstLetter != firstLetter.ToUpper())
             {
-                return new ValidationResult("The first letter of 'name' has to be uppercase");
+                return new ValidationResult("The first letter of 'name' must be uppercase");
             }
 
             return ValidationResult.Success;

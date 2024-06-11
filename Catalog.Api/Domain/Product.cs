@@ -6,7 +6,7 @@ using Catalog.Api.Validation;
 namespace Catalog.Api.Domain;
 
 [Table("Products")]
-public class Product
+public class Product : IValidatableObject
 {
     [Key]
     public int Id { get; set; }
@@ -35,4 +35,22 @@ public class Product
 
     [JsonIgnore]
     public Category? Category { get; set; }
+
+    public IEnumerable<ValidationResult> Validate(ValidationContext validationContext)
+    {
+        if (!string.IsNullOrEmpty(Name))
+        {
+            var firstLetter = Name[0].ToString();
+
+            if (firstLetter != firstLetter.ToUpper())
+            {
+                yield return new ValidationResult("The first letter of 'name' must be uppercase", new[] { nameof(Name) });
+            }
+        }
+
+        if (Stock <= 0)
+        {
+            yield return new ValidationResult("The 'stock' must be bigger than 0", new[] { nameof(Stock) });
+        }
+    }
 }
