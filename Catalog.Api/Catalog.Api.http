@@ -6,7 +6,7 @@ Content-Type: application/json
 
 ###
 
-GET {{apiUrl}}/products/1
+GET {{apiUrl}}/products/7
 Accept: application/json
 
 ###
@@ -16,35 +16,35 @@ Accept: application/json
 Content-Type: application/json
 
 {
-  "name": "diet Coke 2",
-  "description": "Diet Coke 350ml",
-  "price": 5,
-  "imageUrl": "coke.jpg",
-  "stock": 50,
-  "createdAt": "2024-04-06T16:13:32",
+  "name": "Test3",
+  "description": "test product3",
+  "price": 15,
+  "imageUrl": "test3.jpg",
+  "stock": 18,
+  "createdAt": "2024-06-13T19:27:32",
   "categoryId": 1
 }
 
 ###
 
-PUT {{apiUrl}}/products/4
+PUT {{apiUrl}}/products/6
 Accept: application/json
 Content-Type: application/json
 
 {
-  "id": 4,
-  "name": "Modified test",
-  "description": "modified test",
-  "price": 99,
-  "imageUrl": "test.jpg",
-  "stock": 9,
-  "CreatedAt": "2024-04-08T19:52:00.0000",
+  "id": 6,
+  "name": "Test updated",
+  "description": "test product3",
+  "price": 20,
+  "imageUrl": "test3.jpg",
+  "stock": 5,
+  "createdAt": "2024-06-13T19:27:32",
   "categoryId": 1
 }
 
 ###
 
-DELETE {{apiUrl}}/products/5
+DELETE {{apiUrl}}/products/7
 Accept: application/json
 Content-Type: application/json
 
@@ -56,7 +56,7 @@ Content-Type: application/json
 
 ###
 
-GET {{apiUrl}}/category/9
+GET {{apiUrl}}/category/4
 Accept: application/json
 Content-Type: application/json
 
@@ -65,3 +65,15 @@ Content-Type: application/json
 GET {{apiUrl}}/category/products
 Accept: application/json
 Content-Type: application/json
+
+###
+
+PUT {{apiUrl}}/category/4
+Accept: application/json
+Content-Type: application/json
+
+{
+  "id": 9,
+  "name": "test2",
+  "imageUrl": "test1.jpg",
+}
