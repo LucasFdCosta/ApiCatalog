@@ -12,10 +12,10 @@ namespace Catalog.Api.Controllers;
 [ApiController]
 public class CategoryController : ControllerBase
 {
-    private readonly ICategoryRepository _repository;
+    private readonly IRepository<Category> _repository;
     private readonly ILogger _ilogger;
 
-    public CategoryController(ICategoryRepository repository, ILogger<CategoryController> ilogger)
+    public CategoryController(IRepository<Category> repository, ILogger<CategoryController> ilogger)
     {
         _repository = repository;
         _ilogger = ilogger;
@@ -33,7 +33,7 @@ public class CategoryController : ControllerBase
     {
         _ilogger.LogInformation($"============= GET api/category ===============");
         
-        var categories = _repository.GetCategories();
+        var categories = _repository.GetAll();
 
         return Ok(categories);
     }
@@ -43,7 +43,7 @@ public class CategoryController : ControllerBase
     {
         _ilogger.LogInformation($"============= GET api/category/id {id} ===============");
         
-        var category = _repository.GetCategory(id);
+        var category = _repository.Get(c => c.Id == id);
 
         return category is not null ? Ok(category) : NotFound($"Category {id} not found...");
     }
@@ -71,11 +71,11 @@ public class CategoryController : ControllerBase
     [HttpDelete("{id:int}")]
     public IActionResult Delete(int id)
     {
-        var category = _repository.GetCategory(id);
+        var category = _repository.Get(c => c.Id == id);
 
         if (category is null) return NotFound("Category not found!");
 
-        var deleted = _repository.Delete(id);
+        var deleted = _repository.Delete(category);
 
         return Ok(deleted);
     }
