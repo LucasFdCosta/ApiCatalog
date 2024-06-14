@@ -6,12 +6,8 @@ using Catalog.Api.Domain;
 
 namespace Catalog.Api.Repositories
 {
-    public interface IProductRepository
+    public interface IProductRepository : IRepository<Product>
     {
-        IQueryable<Product> GetProducts();
-        Product GetProduct(int id);
-        Product Create(Product Product);
-        bool Update(Product Product);
-        bool Delete(int id);
+        IEnumerable<Product> GetProductsByCategory(int id);
     }
 }
