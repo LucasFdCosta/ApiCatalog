@@ -6,7 +6,7 @@ Content-Type: application/json
 
 ###
 
-GET {{apiUrl}}/products/pagination?pageNumber=2&pageSize=5
+GET {{apiUrl}}/products/pagination?pageNumber=1&pageSize=3
 Accept: application/json
 Content-Type: application/json
 
@@ -64,6 +64,12 @@ Content-Type: application/json
 
 ###
 
+GET {{apiUrl}}/category/pagination?pageNumber=2&pageSize=5
+Accept: application/json
+Content-Type: application/json
+
+###
+
 GET {{apiUrl}}/category/7
 Accept: application/json
 Content-Type: application/json
@@ -75,8 +81,8 @@ Accept: application/json
 Content-Type: application/json
 
 {
-  "name": "category5",
-  "imageUrl": "category5.jpg"
+  "name": "category9",
+  "imageUrl": "category9.jpg"
 }
 
 ###

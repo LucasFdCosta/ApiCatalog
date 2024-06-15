@@ -8,6 +8,7 @@ using Catalog.Api.Repositories;
 using Microsoft.AspNetCore.JsonPatch;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using Newtonsoft.Json;
 
 namespace Catalog.Api.Controllers;
 
@@ -28,6 +29,18 @@ public class ProductsController : ControllerBase
     public ActionResult<IEnumerable<ProductDTO>> Get([FromQuery] ProductsParameters productsParams)
     {
         var products = _uof.ProductRepository.GetProducts(productsParams);
+
+        var metadata = new
+        {
+            products.TotalCount,
+            products.PageSize,
+            products.CurrentPage,
+            products.TotalPages,
+            products.HasNext,
+            products.HasPrevious,
+        };
+
+        Response.Headers.Append("X-Pagination", JsonConvert.SerializeObject(metadata));
 
         var productsDto = _mapper.Map<IEnumerable<ProductDTO>>(products);
 
