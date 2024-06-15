@@ -12,6 +12,12 @@ Content-Type: application/json
 
 ###
 
+GET {{apiUrl}}/products/filter/price/pagination?priceCriterion=eqa&price=10
+Accept: application/json
+Content-Type: application/json
+
+###
+
 GET {{apiUrl}}/products/6
 Accept: application/json
 

@@ -11,6 +11,7 @@ namespace Catalog.Api.Repositories
     {
         // IEnumerable<Product> GetProducts(ProductsParameters productsParameters);
         PagedList<Product> GetProducts(ProductsParameters productsParameters);
+        PagedList<Product> GetProductsFilterPrice(ProductsFilterPrice productsFilterParameters);
         IEnumerable<Product> GetProductsByCategory(int id);
     }
 }

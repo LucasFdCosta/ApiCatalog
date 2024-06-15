@@ -33,6 +33,35 @@ namespace Catalog.Api.Repositories
             return orderedProducts;
         }
 
+        public PagedList<Product> GetProductsFilterPrice(ProductsFilterPrice productsFilterPrice)
+        {
+            var products = GetAll().AsQueryable();
+
+            if (productsFilterPrice.Price.HasValue && !string.IsNullOrEmpty(productsFilterPrice.PriceCriterion))
+            {
+                if (productsFilterPrice.PriceCriterion.Equals("gt", StringComparison.OrdinalIgnoreCase))
+                {
+                    products = products.Where(p => p.Price > productsFilterPrice.Price.Value).OrderBy(p => p.Price);
+                }
+                else if (productsFilterPrice.PriceCriterion.Equals("lt", StringComparison.OrdinalIgnoreCase))
+                {
+                    products = products.Where(p => p.Price < productsFilterPrice.Price.Value).OrderBy(p => p.Price);
+                }
+                else if (productsFilterPrice.PriceCriterion.Equals("eq", StringComparison.OrdinalIgnoreCase))
+                {
+                    products = products.Where(p => p.Price == productsFilterPrice.Price.Value).OrderBy(p => p.Price);
+                }
+                else
+                {
+                    throw new ArgumentException($"'{productsFilterPrice.PriceCriterion}' is not a valid {nameof(productsFilterPrice.PriceCriterion)} value");
+                }
+            }
+
+            var filteredProducts = PagedList<Product>.ToPagedList(products, productsFilterPrice.PageNumber, productsFilterPrice.PageSize);
+
+            return filteredProducts;
+        }
+
         public IEnumerable<Product> GetProductsByCategory(int categoryid)
         {
             return GetAll().Where(c => c.CategoryId == categoryid);

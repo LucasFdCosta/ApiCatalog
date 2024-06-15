@@ -25,11 +25,36 @@ public class ProductsController : ControllerBase
         _mapper = mapper;
     }
 
+    [HttpGet]
+    public ActionResult<IEnumerable<ProductDTO>> Get()
+    {
+        var products = _uof.ProductRepository.GetAll();
+
+        if (products is null) return NotFound("No products found!");
+
+        var productsDto = _mapper.Map<IEnumerable<ProductDTO>>(products);
+
+        return Ok(productsDto);
+    }
+
     [HttpGet("pagination")]
     public ActionResult<IEnumerable<ProductDTO>> Get([FromQuery] ProductsParameters productsParams)
     {
         var products = _uof.ProductRepository.GetProducts(productsParams);
 
+        return GetProducts(products);
+    }
+
+    [HttpGet("filter/price/pagination")]
+    public ActionResult<IEnumerable<ProductDTO>> GetProductsFilterPrice([FromQuery] ProductsFilterPrice productsFilterPriceParams)
+    {
+        var products = _uof.ProductRepository.GetProductsFilterPrice(productsFilterPriceParams);
+
+        return GetProducts(products);
+    }
+
+    private ActionResult<IEnumerable<ProductDTO>> GetProducts(PagedList<Product> products)
+    {
         var metadata = new
         {
             products.TotalCount,
@@ -41,18 +66,6 @@ public class ProductsController : ControllerBase
         };
 
         Response.Headers.Append("X-Pagination", JsonConvert.SerializeObject(metadata));
-
-        var productsDto = _mapper.Map<IEnumerable<ProductDTO>>(products);
-
-        return Ok(productsDto);
-    }
-
-    [HttpGet]
-    public ActionResult<IEnumerable<ProductDTO>> Get()
-    {
-        var products = _uof.ProductRepository.GetAll();
-
-        if (products is null) return NotFound("No products found!");
 
         var productsDto = _mapper.Map<IEnumerable<ProductDTO>>(products);
 
