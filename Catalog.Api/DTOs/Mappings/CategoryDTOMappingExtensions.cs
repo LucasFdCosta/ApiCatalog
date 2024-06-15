@@ -20,7 +20,7 @@ namespace Catalog.Api.DTOs.Mappings
             };
         }
 
-        public static Category? ToCategoryDTO(this CategoryDTO categoryDto)
+        public static Category? ToCategory(this CategoryDTO categoryDto)
         {
             if (categoryDto is null) return null;
 
