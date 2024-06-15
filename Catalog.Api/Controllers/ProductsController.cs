@@ -4,6 +4,7 @@ using Catalog.Api.Domain;
 using Catalog.Api.DTOs;
 using Catalog.Api.DTOs.Mappings;
 using Catalog.Api.Repositories;
+using Microsoft.AspNetCore.JsonPatch;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
@@ -72,6 +73,29 @@ public class ProductsController : ControllerBase
         var newProductDto = _mapper.Map<ProductDTO>(created);
 
         return new CreatedAtRouteResult("GetProduct", new { id = newProductDto.Id }, newProductDto);
+    }
+
+    [HttpPatch("{id}/UpdatePartial")]
+    public ActionResult<ProductDTOUpdateResponse> Patch(int id, JsonPatchDocument<ProductDTOUpdateRequest> patchProductDTO)
+    {
+        if (patchProductDTO is null || id <= 0) return BadRequest();
+
+        var product = _uof.ProductRepository.Get(p => p.Id == id);
+
+        if (product is null) return NotFound();
+
+        var productDtoUpdateRequest = _mapper.Map<ProductDTOUpdateRequest>(product);
+
+        patchProductDTO.ApplyTo(productDtoUpdateRequest, ModelState);
+
+        if (!ModelState.IsValid || TryValidateModel(productDtoUpdateRequest)) return BadRequest(ModelState);
+
+        _mapper.Map(productDtoUpdateRequest, product);
+        _uof.ProductRepository.Update(product);
+
+        _uof.Commit();
+
+        return Ok(_mapper.Map<ProductDTOUpdateResponse>(product));
     }
 
     [HttpPut("{id:int}")]
