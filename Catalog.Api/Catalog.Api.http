@@ -76,6 +76,12 @@ Content-Type: application/json
 
 ###
 
+GET {{apiUrl}}/category/filter/name/pagination?name=food
+Accept: application/json
+Content-Type: application/json
+
+###
+
 GET {{apiUrl}}/category/7
 Accept: application/json
 Content-Type: application/json

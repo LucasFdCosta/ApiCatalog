@@ -23,5 +23,19 @@ namespace Catalog.Api.Repositories
 
             return orderedCategories;
         }
+
+        public PagedList<Category> GetCategoriesFilterName(CategoriesFilterName categoriesFilterName)
+        {
+            var categories = GetAll().AsQueryable();
+
+            if (!string.IsNullOrEmpty(categoriesFilterName.Name))
+            {
+                categories = categories.Where(c => c.Name.Contains(categoriesFilterName.Name));
+            }
+
+            var filteredCategories = PagedList<Category>.ToPagedList(categories, categoriesFilterName.PageNumber, categoriesFilterName.PageSize);
+
+            return filteredCategories;
+        }
     }
 }

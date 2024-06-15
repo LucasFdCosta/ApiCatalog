@@ -31,11 +31,37 @@ public class CategoryController : ControllerBase
         return Ok(service.Hello(name));
     }
 
+    [HttpGet]
+    [ServiceFilter(typeof(ApiLoggingFilter))]
+    public ActionResult<IEnumerable<CategoryDTO>> Get()
+    {
+        _ilogger.LogInformation($"============= GET api/category ===============");
+        
+        var categories = _uof.CategoryRepository.GetAll();
+
+        var categoriesDto = categories.ToCategoryDTOList();
+
+        return Ok(categoriesDto);
+    }
+
     [HttpGet("pagination")]
     public ActionResult<IEnumerable<CategoryDTO>> Get([FromQuery] CategoriesParameters categoriesParams)
     {
         var categories = _uof.CategoryRepository.GetCategories(categoriesParams);
 
+        return GetCategories(categories);
+    }
+
+    [HttpGet("filter/name/pagination")]
+    public ActionResult<IEnumerable<CategoryDTO>> GetCategoriesFilterName([FromQuery] CategoriesFilterName categoriesFilterName)
+    {
+        var filteredCategories = _uof.CategoryRepository.GetCategoriesFilterName(categoriesFilterName);
+
+        return GetCategories(filteredCategories);
+    }
+
+    private ActionResult<IEnumerable<CategoryDTO>> GetCategories(PagedList<Category> categories)
+    {
         var metadata = new
         {
             categories.TotalCount,
@@ -47,19 +73,6 @@ public class CategoryController : ControllerBase
         };
 
         Response.Headers.Append("X-Pagination", JsonConvert.SerializeObject(metadata));
-
-        var categoriesDto = categories.ToCategoryDTOList();
-
-        return Ok(categoriesDto);
-    }
-
-    [HttpGet]
-    [ServiceFilter(typeof(ApiLoggingFilter))]
-    public ActionResult<IEnumerable<CategoryDTO>> Get()
-    {
-        _ilogger.LogInformation($"============= GET api/category ===============");
-        
-        var categories = _uof.CategoryRepository.GetAll();
 
         var categoriesDto = categories.ToCategoryDTOList();
 

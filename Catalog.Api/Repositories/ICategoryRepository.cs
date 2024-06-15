@@ -9,6 +9,7 @@ namespace Catalog.Api.Repositories
 {
     public interface ICategoryRepository : IRepository<Category>
     {
-        PagedList<Category> GetCategories(CategoriesParameters productsParameters);
+        PagedList<Category> GetCategories(CategoriesParameters categoriesParameters);
+        PagedList<Category> GetCategoriesFilterName(CategoriesFilterName categoriesFilterName);
     }
 }
