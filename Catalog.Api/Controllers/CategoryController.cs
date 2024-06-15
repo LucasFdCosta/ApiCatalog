@@ -12,12 +12,12 @@ namespace Catalog.Api.Controllers;
 [ApiController]
 public class CategoryController : ControllerBase
 {
-    private readonly IRepository<Category> _repository;
+    private readonly IUnitOfWork _uof;
     private readonly ILogger _ilogger;
 
-    public CategoryController(IRepository<Category> repository, ILogger<CategoryController> ilogger)
+    public CategoryController(IUnitOfWork uof,ILogger<CategoryController> ilogger)
     {
-        _repository = repository;
+        _uof = uof;
         _ilogger = ilogger;
     }
 
@@ -33,7 +33,7 @@ public class CategoryController : ControllerBase
     {
         _ilogger.LogInformation($"============= GET api/category ===============");
         
-        var categories = _repository.GetAll();
+        var categories = _uof.CategoryRepository.GetAll();
 
         return Ok(categories);
     }
@@ -43,7 +43,7 @@ public class CategoryController : ControllerBase
     {
         _ilogger.LogInformation($"============= GET api/category/id {id} ===============");
         
-        var category = _repository.Get(c => c.Id == id);
+        var category = _uof.CategoryRepository.Get(c => c.Id == id);
 
         return category is not null ? Ok(category) : NotFound($"Category {id} not found...");
     }
@@ -53,7 +53,8 @@ public class CategoryController : ControllerBase
     {
         if (category is null) return BadRequest("Invalid data.");
 
-        var created = _repository.Create(category);
+        var created = _uof.CategoryRepository.Create(category);
+        _uof.Commit();
 
         return new CreatedAtRouteResult("GetCategory", new { id = created.Id }, created);
     }
@@ -63,7 +64,8 @@ public class CategoryController : ControllerBase
     {
         if (id != category.Id) return BadRequest("Invalid ID");
 
-        _repository.Update(category);
+        _uof.CategoryRepository.Update(category);
+        _uof.Commit();
 
         return Ok(category);
     }
@@ -71,11 +73,12 @@ public class CategoryController : ControllerBase
     [HttpDelete("{id:int}")]
     public IActionResult Delete(int id)
     {
-        var category = _repository.Get(c => c.Id == id);
+        var category = _uof.CategoryRepository.Get(c => c.Id == id);
 
         if (category is null) return NotFound("Category not found!");
 
-        var deleted = _repository.Delete(category);
+        var deleted = _uof.CategoryRepository.Delete(category);
+        _uof.Commit();
 
         return Ok(deleted);
     }

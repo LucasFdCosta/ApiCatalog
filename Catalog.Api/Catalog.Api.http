@@ -6,12 +6,12 @@ Content-Type: application/json
 
 ###
 
-GET {{apiUrl}}/products/67
+GET {{apiUrl}}/products/9
 Accept: application/json
 
 ###
 
-GET {{apiUrl}}/products/products/1
+GET {{apiUrl}}/products/products/2
 Accept: application/json
 
 ###
@@ -21,35 +21,35 @@ Accept: application/json
 Content-Type: application/json
 
 {
-  "name": "Test5",
-  "description": "test product5",
-  "price": 15,
-  "imageUrl": "test5.jpg",
-  "stock": 18,
-  "createdAt": "2024-06-13T19:27:32",
+  "name": "Test4",
+  "description": "test product4",
+  "price": 20.00,
+  "imageUrl": "test4.jpg",
+  "stock": 5,
+  "createdAt": "2024-06-14T19:27:32",
   "categoryId": 2
 }
 
 ###
 
-PUT {{apiUrl}}/products/8
+PUT {{apiUrl}}/products/9
 Accept: application/json
 Content-Type: application/json
 
 {
-  "id": 8,
-  "name": "Test updated",
-  "description": "test product5",
-  "price": 20,
-  "imageUrl": "test5.jpg",
-  "stock": 5,
-  "createdAt": "2024-06-13T19:27:32",
-  "categoryId": 1
+    "id": 9,
+    "name": "Test4 updated",
+    "description": "test product4",
+    "price": 20.00,
+    "imageUrl": "test4.jpg",
+    "stock": 5,
+    "createdAt": "2024-06-14T19:27:32",
+    "categoryId": 2
 }
 
 ###
 
-DELETE {{apiUrl}}/products/8
+DELETE {{apiUrl}}/products/9
 Accept: application/json
 Content-Type: application/json
 
@@ -61,13 +61,7 @@ Content-Type: application/json
 
 ###
 
-GET {{apiUrl}}/category/2
-Accept: application/json
-Content-Type: application/json
-
-###
-
-GET {{apiUrl}}/category/products
+GET {{apiUrl}}/category/6
 Accept: application/json
 Content-Type: application/json
 
@@ -78,24 +72,24 @@ Accept: application/json
 Content-Type: application/json
 
 {
-  "name": "category3",
-  "imageUrl": "category3.jpg"
+  "name": "category4",
+  "imageUrl": "category4.jpg"
 }
 
 ###
 
-PUT {{apiUrl}}/category/5
+PUT {{apiUrl}}/category/6
 Accept: application/json
 Content-Type: application/json
 
 {
-  "id": 5,
-  "name": "category3 updated",
-  "imageUrl": "category3.jpg"
+  "id": 6,
+  "name": "category4 updated",
+  "imageUrl": "category4.jpg"
 }
 
 ###
 
-DELETE  {{apiUrl}}/category/5
+DELETE  {{apiUrl}}/category/4
 Accept: application/json
 Content-Type: application/json

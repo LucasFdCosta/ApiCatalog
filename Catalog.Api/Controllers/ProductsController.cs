@@ -10,19 +10,17 @@ namespace Catalog.Api.Controllers;
 [ApiController]
 public class ProductsController : ControllerBase
 {
-    // private readonly IRepository<Product> _repository;
-    private readonly IProductRepository _productRepository;
+    private readonly IUnitOfWork _uof;
 
-    public ProductsController(/*IRepository<Product> repository, */IProductRepository productRepository)
+    public ProductsController(IUnitOfWork uof)
     {
-        // _repository = repository;
-        _productRepository = productRepository;
+        _uof = uof;
     }
 
     [HttpGet]
     public IActionResult Get()
     {
-        var products = _productRepository.GetAll();
+        var products = _uof.ProductRepository.GetAll();
 
         if (products is null) return NotFound("No products found!");
 
@@ -32,7 +30,7 @@ public class ProductsController : ControllerBase
     [HttpGet("{id:int:min(1)}", Name = "GetProduct")]
     public IActionResult GetById(int id)
     {
-        var product = _productRepository.Get(p => p.Id == id);
+        var product = _uof.ProductRepository.Get(p => p.Id == id);
 
         if (product is null) return NotFound("Product not found!");
 
@@ -42,7 +40,7 @@ public class ProductsController : ControllerBase
     [HttpGet("products/{id}")]
     public IActionResult GetProductsByCategory(int id)
     {
-        var products = _productRepository.GetProductsByCategory(id).ToList();
+        var products = _uof.ProductRepository.GetProductsByCategory(id).ToList();
 
         if (products is null) return NotFound("Product not found!");
 
@@ -54,7 +52,8 @@ public class ProductsController : ControllerBase
     {
         if (product is null) return BadRequest();
 
-        var newProduct = _productRepository.Create(product);
+        var newProduct = _uof.ProductRepository.Create(product);
+        _uof.Commit();
 
         return new CreatedAtRouteResult("GetProduct", new { id = newProduct.Id }, newProduct);
     }
@@ -64,7 +63,8 @@ public class ProductsController : ControllerBase
     {
         if (id != product.Id) return BadRequest("Invalid ID");
 
-        var updatedProduct = _productRepository.Update(product);
+        var updatedProduct = _uof.ProductRepository.Update(product);
+        _uof.Commit();
 
         return updatedProduct is not null ? Ok(updatedProduct) : StatusCode(500, $"Error while updating product {id}");
     }
@@ -72,11 +72,12 @@ public class ProductsController : ControllerBase
     [HttpDelete("{id:int}")]
     public IActionResult Delete(int id)
     {
-        var product = _productRepository.Get(p => p.Id == id);
+        var product = _uof.ProductRepository.Get(p => p.Id == id);
 
         if (product is null) return NotFound("Product not found!");
 
-        var deletedProduct = _productRepository.Delete(product);
+        var deletedProduct = _uof.ProductRepository.Delete(product);
+        _uof.Commit();
 
         return deletedProduct is not null ? Ok($"Successfully deleted product {id}") : StatusCode(500, $"Error while deleting product {id}");
     }
