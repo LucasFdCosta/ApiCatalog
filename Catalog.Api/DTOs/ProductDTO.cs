@@ -22,7 +22,6 @@ namespace Catalog.Api.DTOs
         public string Description { get; set; } = string.Empty;
 
         [Required]
-        [Column(TypeName = "decimal(10,2)")]
         [Range(1, 10000, ErrorMessage = "The 'price' has to be between {1} and {2}")]
         public decimal Price { get; set; }
 

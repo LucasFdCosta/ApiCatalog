@@ -6,12 +6,12 @@ Content-Type: application/json
 
 ###
 
-GET {{apiUrl}}/products/9
+GET {{apiUrl}}/products/6
 Accept: application/json
 
 ###
 
-GET {{apiUrl}}/products/products/2
+GET {{apiUrl}}/products/products/3
 Accept: application/json
 
 ###
@@ -21,35 +21,32 @@ Accept: application/json
 Content-Type: application/json
 
 {
-  "name": "Test4",
-  "description": "test product4",
+  "name": "Test5",
+  "description": "test product5",
   "price": 20.00,
-  "imageUrl": "test4.jpg",
+  "imageUrl": "test5.jpg",
   "stock": 5,
-  "createdAt": "2024-06-14T19:27:32",
-  "categoryId": 2
+  "categoryId": 3
 }
 
 ###
 
-PUT {{apiUrl}}/products/9
+PUT {{apiUrl}}/products/10
 Accept: application/json
 Content-Type: application/json
 
 {
-    "id": 9,
-    "name": "Test4 updated",
-    "description": "test product4",
+    "id": 10,
+    "name": "Test5 updated",
+    "description": "test product5",
     "price": 20.00,
-    "imageUrl": "test4.jpg",
-    "stock": 5,
-    "createdAt": "2024-06-14T19:27:32",
-    "categoryId": 2
+    "imageUrl": "test5.jpg",
+    "categoryId": 3
 }
 
 ###
 
-DELETE {{apiUrl}}/products/9
+DELETE {{apiUrl}}/products/6
 Accept: application/json
 Content-Type: application/json
 
@@ -61,7 +58,7 @@ Content-Type: application/json
 
 ###
 
-GET {{apiUrl}}/category/6
+GET {{apiUrl}}/category/7
 Accept: application/json
 Content-Type: application/json
 
@@ -72,24 +69,24 @@ Accept: application/json
 Content-Type: application/json
 
 {
-  "name": "category4",
-  "imageUrl": "category4.jpg"
+  "name": "category5",
+  "imageUrl": "category5.jpg"
 }
 
 ###
 
-PUT {{apiUrl}}/category/6
+PUT {{apiUrl}}/category/7
 Accept: application/json
 Content-Type: application/json
 
 {
-  "id": 6,
-  "name": "category4 updated",
-  "imageUrl": "category4.jpg"
+  "id": 7,
+  "name": "category5 updated",
+  "imageUrl": "category5.jpg"
 }
 
 ###
 
-DELETE  {{apiUrl}}/category/4
+DELETE  {{apiUrl}}/category/6
 Accept: application/json
 Content-Type: application/json

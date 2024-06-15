@@ -1,4 +1,5 @@
-﻿using Catalog.Api.Context;
+﻿using AutoMapper;
+using Catalog.Api.Context;
 using Catalog.Api.Domain;
 using Catalog.Api.DTOs;
 using Catalog.Api.DTOs.Mappings;
@@ -13,10 +14,12 @@ namespace Catalog.Api.Controllers;
 public class ProductsController : ControllerBase
 {
     private readonly IUnitOfWork _uof;
+    private readonly IMapper _mapper;
 
-    public ProductsController(IUnitOfWork uof)
+    public ProductsController(IUnitOfWork uof, IMapper mapper)
     {
         _uof = uof;
+        _mapper = mapper;
     }
 
     [HttpGet]
@@ -26,7 +29,7 @@ public class ProductsController : ControllerBase
 
         if (products is null) return NotFound("No products found!");
 
-        var productsDto = products.ToProductDTOList();
+        var productsDto = _mapper.Map<IEnumerable<ProductDTO>>(products);
 
         return Ok(productsDto);
     }
@@ -38,7 +41,7 @@ public class ProductsController : ControllerBase
 
         if (product is null) return NotFound("Product not found!");
 
-        var productDto = product.ToProductDTO();
+        var productDto = _mapper.Map<ProductDTO>(product);
 
         return Ok(productDto);
     }
@@ -50,7 +53,7 @@ public class ProductsController : ControllerBase
 
         if (products is null) return NotFound("Product not found!");
         
-        var productsDto = products.ToProductDTOList();
+        var productsDto = _mapper.Map<IEnumerable<ProductDTO>>(products);
 
         return Ok(productsDto);
     }
@@ -60,12 +63,13 @@ public class ProductsController : ControllerBase
     {
         if (productDto is null) return BadRequest();
 
-        var product = productDto.ToProduct();
+        var product = _mapper.Map<Product>(productDto);
 
         var created = _uof.ProductRepository.Create(product);
+
         _uof.Commit();
 
-        var newProductDto = created.ToProductDTO();
+        var newProductDto = _mapper.Map<ProductDTO>(created);
 
         return new CreatedAtRouteResult("GetProduct", new { id = newProductDto.Id }, newProductDto);
     }
@@ -75,12 +79,12 @@ public class ProductsController : ControllerBase
     {
         if (id != productDto.Id) return BadRequest("Invalid ID");
 
-        var product = productDto.ToProduct();
+        var product = _mapper.Map<Product>(productDto);
 
         var updated = _uof.ProductRepository.Update(product);
         _uof.Commit();
 
-        var updatedProductDto = updated.ToProductDTO();
+        var updatedProductDto = _mapper.Map<ProductDTO>(updated);
         
         return Ok(updatedProductDto);
     }
@@ -95,7 +99,7 @@ public class ProductsController : ControllerBase
         var deleted = _uof.ProductRepository.Delete(product);
         _uof.Commit();
 
-        var deletedProductDto = deleted.ToProductDTO();
+        var deletedProductDto = _mapper.Map<ProductDTO>(deleted);
 
         return Ok(deletedProductDto);
     }
