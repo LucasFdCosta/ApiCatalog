@@ -3,6 +3,7 @@ using Catalog.Api.Context;
 using Catalog.Api.Domain;
 using Catalog.Api.DTOs;
 using Catalog.Api.DTOs.Mappings;
+using Catalog.Api.Pagination;
 using Catalog.Api.Repositories;
 using Microsoft.AspNetCore.JsonPatch;
 using Microsoft.AspNetCore.Mvc;
@@ -21,6 +22,16 @@ public class ProductsController : ControllerBase
     {
         _uof = uof;
         _mapper = mapper;
+    }
+
+    [HttpGet("pagination")]
+    public ActionResult<IEnumerable<ProductDTO>> Get([FromQuery] ProductsParameters productsParams)
+    {
+        var products = _uof.ProductRepository.GetProducts(productsParams);
+
+        var productsDto = _mapper.Map<IEnumerable<ProductDTO>>(products);
+
+        return Ok(productsDto);
     }
 
     [HttpGet]

@@ -24,7 +24,7 @@ namespace Catalog.Api.Repositories
 
         public IEnumerable<T> GetAll()
         {
-            return _context.Set<T>().AsNoTracking().ToList();
+            return _context.Set<T>().AsNoTracking();
         }
 
         public T Create(T entity)

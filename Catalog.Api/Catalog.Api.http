@@ -6,6 +6,12 @@ Content-Type: application/json
 
 ###
 
+GET {{apiUrl}}/products/pagination?pageNumber=2&pageSize=5
+Accept: application/json
+Content-Type: application/json
+
+###
+
 GET {{apiUrl}}/products/6
 Accept: application/json
 
@@ -21,12 +27,12 @@ Accept: application/json
 Content-Type: application/json
 
 {
-  "name": "Test5",
+  "name": "Product 5",
   "description": "test product5",
-  "price": 20.00,
-  "imageUrl": "test5.jpg",
+  "price": 5.00,
+  "imageUrl": "product5.jpg",
   "stock": 5,
-  "categoryId": 3
+  "categoryId": 1
 }
 
 ###
