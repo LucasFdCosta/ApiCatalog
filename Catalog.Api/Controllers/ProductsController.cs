@@ -1,5 +1,7 @@
 ﻿using Catalog.Api.Context;
 using Catalog.Api.Domain;
+using Catalog.Api.DTOs;
+using Catalog.Api.DTOs.Mappings;
 using Catalog.Api.Repositories;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -18,67 +20,83 @@ public class ProductsController : ControllerBase
     }
 
     [HttpGet]
-    public IActionResult Get()
+    public ActionResult<IEnumerable<ProductDTO>> Get()
     {
         var products = _uof.ProductRepository.GetAll();
 
         if (products is null) return NotFound("No products found!");
 
-        return Ok(products);
+        var productsDto = products.ToProductDTOList();
+
+        return Ok(productsDto);
     }
 
     [HttpGet("{id:int:min(1)}", Name = "GetProduct")]
-    public IActionResult GetById(int id)
+    public ActionResult<ProductDTO> GetById(int id)
     {
         var product = _uof.ProductRepository.Get(p => p.Id == id);
 
         if (product is null) return NotFound("Product not found!");
 
-        return Ok(product);
+        var productDto = product.ToProductDTO();
+
+        return Ok(productDto);
     }
 
     [HttpGet("products/{id}")]
-    public IActionResult GetProductsByCategory(int id)
+    public ActionResult<IEnumerable<ProductDTO>> GetProductsByCategory(int id)
     {
         var products = _uof.ProductRepository.GetProductsByCategory(id).ToList();
 
         if (products is null) return NotFound("Product not found!");
+        
+        var productsDto = products.ToProductDTOList();
 
-        return Ok(products);
+        return Ok(productsDto);
     }
 
     [HttpPost]
-    public IActionResult Post(Product product)
+    public ActionResult<ProductDTO> Post(ProductDTO productDto)
     {
-        if (product is null) return BadRequest();
+        if (productDto is null) return BadRequest();
 
-        var newProduct = _uof.ProductRepository.Create(product);
+        var product = productDto.ToProduct();
+
+        var created = _uof.ProductRepository.Create(product);
         _uof.Commit();
 
-        return new CreatedAtRouteResult("GetProduct", new { id = newProduct.Id }, newProduct);
+        var newProductDto = created.ToProductDTO();
+
+        return new CreatedAtRouteResult("GetProduct", new { id = newProductDto.Id }, newProductDto);
     }
 
     [HttpPut("{id:int}")]
-    public IActionResult Put(int id, Product product)
+    public ActionResult<ProductDTO> Put(int id, ProductDTO productDto)
     {
-        if (id != product.Id) return BadRequest("Invalid ID");
+        if (id != productDto.Id) return BadRequest("Invalid ID");
 
-        var updatedProduct = _uof.ProductRepository.Update(product);
+        var product = productDto.ToProduct();
+
+        var updated = _uof.ProductRepository.Update(product);
         _uof.Commit();
 
-        return updatedProduct is not null ? Ok(updatedProduct) : StatusCode(500, $"Error while updating product {id}");
+        var updatedProductDto = updated.ToProductDTO();
+        
+        return Ok(updatedProductDto);
     }
 
     [HttpDelete("{id:int}")]
-    public IActionResult Delete(int id)
+    public ActionResult<ProductDTO> Delete(int id)
     {
         var product = _uof.ProductRepository.Get(p => p.Id == id);
 
         if (product is null) return NotFound("Product not found!");
 
-        var deletedProduct = _uof.ProductRepository.Delete(product);
+        var deleted = _uof.ProductRepository.Delete(product);
         _uof.Commit();
 
-        return deletedProduct is not null ? Ok($"Successfully deleted product {id}") : StatusCode(500, $"Error while deleting product {id}");
+        var deletedProductDto = deleted.ToProductDTO();
+
+        return Ok(deletedProductDto);
     }
 }
