@@ -1,6 +1,7 @@
 ﻿using Catalog.Api.Context;
 using Catalog.Api.Domain;
 using Catalog.Api.DTOs;
+using Catalog.Api.DTOs.Mappings;
 using Catalog.Api.Filters;
 using Catalog.Api.Repositories;
 using Catalog.Api.Services;
@@ -36,17 +37,7 @@ public class CategoryController : ControllerBase
         
         var categories = _uof.CategoryRepository.GetAll();
 
-        var categoriesDto = new List<CategoryDTO>();
-
-        foreach (var category in categories)
-        {
-            categoriesDto.Add(new CategoryDTO()
-            {
-                Id = category.Id,
-                Name = category.Name,
-                ImageUrl = category.ImageUrl
-            });
-        }
+        var categoriesDto = categories.ToCategoryDTOList();
 
         return Ok(categoriesDto);
     }
@@ -60,12 +51,7 @@ public class CategoryController : ControllerBase
 
         if (category is null) return NotFound($"Category {id} not found...");
 
-        var categoryDto = new CategoryDTO()
-        {
-            Id = category.Id,
-            Name = category.Name,
-            ImageUrl = category.ImageUrl
-        };
+        var categoryDto = category.ToCategoryDTO();
 
         return Ok(categoryDto);
     }
@@ -75,22 +61,12 @@ public class CategoryController : ControllerBase
     {
         if (categoryDto is null) return BadRequest("Invalid data.");
 
-        var category = new Category()
-        {
-            // Id = categoryDto.Id,
-            Name = categoryDto.Name,
-            ImageUrl = categoryDto.ImageUrl
-        };
+        var category = categoryDto.ToCategory();
 
         var created = _uof.CategoryRepository.Create(category);
         _uof.Commit();
 
-        var newCategoryDto = new CategoryDTO()
-        {
-            Id = created.Id,
-            Name = created.Name,
-            ImageUrl = created.ImageUrl
-        };
+        var newCategoryDto = created.ToCategoryDTO();
 
         return new CreatedAtRouteResult("GetCategory", new { id = newCategoryDto.Id }, newCategoryDto);
     }
@@ -100,22 +76,12 @@ public class CategoryController : ControllerBase
     {
         if (id != categoryDto.Id) return BadRequest("Invalid ID");
         
-        var category = new Category()
-        {
-            Id = categoryDto.Id,
-            Name = categoryDto.Name,
-            ImageUrl = categoryDto.ImageUrl
-        };
+        var category = categoryDto.ToCategory();
 
         var updated = _uof.CategoryRepository.Update(category);
         _uof.Commit();
 
-        var updatedCategoryDto = new CategoryDTO()
-        {
-            Id = updated.Id,
-            Name = updated.Name,
-            ImageUrl = updated.ImageUrl
-        };
+        var updatedCategoryDto = updated.ToCategoryDTO();
 
         return Ok(updatedCategoryDto);
     }
@@ -130,12 +96,7 @@ public class CategoryController : ControllerBase
         var deleted = _uof.CategoryRepository.Delete(category);
         _uof.Commit();
         
-        var deletedCategoryDto = new CategoryDTO()
-        {
-            Id = deleted.Id,
-            Name = deleted.Name,
-            ImageUrl = deleted.ImageUrl
-        };
+        var deletedCategoryDto = deleted.ToCategoryDTO();
 
         return Ok(deletedCategoryDto);
     }
