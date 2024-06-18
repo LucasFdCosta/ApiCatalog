@@ -24,18 +24,20 @@ namespace Catalog.Api.Repositories
         //         .ToList();
         // }
 
-        public PagedList<Product> GetProducts(ProductsParameters productsParams)
+        public async Task<PagedList<Product>> GetProductsAsync(ProductsParameters productsParams)
         {
-            var products = GetAll().OrderBy(p => p.Id).AsQueryable();
+            var products = await GetAllAsync();
 
-            var orderedProducts = PagedList<Product>.ToPagedList(products, productsParams.PageNumber, productsParams.PageSize);
+            var orderedProducts = products.OrderBy(p => p.Id).AsQueryable();
+            
+            var result = PagedList<Product>.ToPagedList(orderedProducts, productsParams.PageNumber, productsParams.PageSize);
 
-            return orderedProducts;
+            return result;
         }
 
-        public PagedList<Product> GetProductsFilterPrice(ProductsFilterPrice productsFilterPrice)
+        public async Task<PagedList<Product>> GetProductsFilterPriceAsync(ProductsFilterPrice productsFilterPrice)
         {
-            var products = GetAll().AsQueryable();
+            var products = await GetAllAsync();
 
             if (productsFilterPrice.Price.HasValue && !string.IsNullOrEmpty(productsFilterPrice.PriceCriterion))
             {
@@ -57,14 +59,18 @@ namespace Catalog.Api.Repositories
                 }
             }
 
-            var filteredProducts = PagedList<Product>.ToPagedList(products, productsFilterPrice.PageNumber, productsFilterPrice.PageSize);
+            var filteredProducts = PagedList<Product>.ToPagedList(products.AsQueryable(), productsFilterPrice.PageNumber, productsFilterPrice.PageSize);
 
             return filteredProducts;
         }
 
-        public IEnumerable<Product> GetProductsByCategory(int categoryid)
+        public async Task<IEnumerable<Product>> GetProductsByCategoryAsync(int categoryid)
         {
-            return GetAll().Where(c => c.CategoryId == categoryid);
+            var products = await GetAllAsync();
+
+            var productsByCategory = products.Where(c => c.CategoryId == categoryid);
+
+            return productsByCategory;
         }
     }
 }

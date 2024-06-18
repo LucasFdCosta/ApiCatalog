@@ -10,8 +10,8 @@ namespace Catalog.Api.Repositories
     public interface IProductRepository : IRepository<Product>
     {
         // IEnumerable<Product> GetProducts(ProductsParameters productsParameters);
-        PagedList<Product> GetProducts(ProductsParameters productsParameters);
-        PagedList<Product> GetProductsFilterPrice(ProductsFilterPrice productsFilterParameters);
-        IEnumerable<Product> GetProductsByCategory(int id);
+        Task<PagedList<Product>> GetProductsAsync(ProductsParameters productsParameters);
+        Task<PagedList<Product>> GetProductsFilterPriceAsync(ProductsFilterPrice productsFilterParameters);
+        Task<IEnumerable<Product>> GetProductsByCategoryAsync(int id);
     }
 }

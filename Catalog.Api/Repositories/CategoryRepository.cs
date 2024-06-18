@@ -15,25 +15,27 @@ namespace Catalog.Api.Repositories
         {
         }
 
-        public PagedList<Category> GetCategories(CategoriesParameters categoriesParams)
+        public async Task<PagedList<Category>> GetCategoriesAsync(CategoriesParameters categoriesParams)
         {
-            var categories = GetAll().OrderBy(c => c.Id).AsQueryable();
+            var categories = await GetAllAsync();
 
-            var orderedCategories = PagedList<Category>.ToPagedList(categories, categoriesParams.PageNumber, categoriesParams.PageSize);
+            var orderedCategories = categories.OrderBy(c => c.Id).AsQueryable();
 
-            return orderedCategories;
+            var result = PagedList<Category>.ToPagedList(orderedCategories, categoriesParams.PageNumber, categoriesParams.PageSize);
+
+            return result;
         }
 
-        public PagedList<Category> GetCategoriesFilterName(CategoriesFilterName categoriesFilterName)
+        public async Task<PagedList<Category>> GetCategoriesFilterNameAsync(CategoriesFilterName categoriesFilterName)
         {
-            var categories = GetAll().AsQueryable();
+            var categories = await GetAllAsync();
 
             if (!string.IsNullOrEmpty(categoriesFilterName.Name))
             {
                 categories = categories.Where(c => c.Name.Contains(categoriesFilterName.Name));
             }
 
-            var filteredCategories = PagedList<Category>.ToPagedList(categories, categoriesFilterName.PageNumber, categoriesFilterName.PageSize);
+            var filteredCategories = PagedList<Category>.ToPagedList(categories.AsQueryable(), categoriesFilterName.PageNumber, categoriesFilterName.PageSize);
 
             return filteredCategories;
         }
