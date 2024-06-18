@@ -6,6 +6,7 @@ using Catalog.Api.Context;
 using Catalog.Api.Domain;
 using Catalog.Api.Pagination;
 using Microsoft.EntityFrameworkCore;
+using X.PagedList;
 
 namespace Catalog.Api.Repositories
 {
@@ -24,18 +25,19 @@ namespace Catalog.Api.Repositories
         //         .ToList();
         // }
 
-        public async Task<PagedList<Product>> GetProductsAsync(ProductsParameters productsParams)
+        public async Task<IPagedList<Product>> GetProductsAsync(ProductsParameters productsParams)
         {
             var products = await GetAllAsync();
 
             var orderedProducts = products.OrderBy(p => p.Id).AsQueryable();
             
-            var result = PagedList<Product>.ToPagedList(orderedProducts, productsParams.PageNumber, productsParams.PageSize);
+            // var result = PagedList<Product>.ToPagedList(orderedProducts, productsParams.PageNumber, productsParams.PageSize);
+            var result = await orderedProducts.ToPagedListAsync(productsParams.PageNumber, productsParams.PageSize);
 
             return result;
         }
 
-        public async Task<PagedList<Product>> GetProductsFilterPriceAsync(ProductsFilterPrice productsFilterPrice)
+        public async Task<IPagedList<Product>> GetProductsFilterPriceAsync(ProductsFilterPrice productsFilterPrice)
         {
             var products = await GetAllAsync();
 
@@ -59,9 +61,10 @@ namespace Catalog.Api.Repositories
                 }
             }
 
-            var filteredProducts = PagedList<Product>.ToPagedList(products.AsQueryable(), productsFilterPrice.PageNumber, productsFilterPrice.PageSize);
+            // var filteredProducts = PagedList<Product>.ToPagedList(products.AsQueryable(), productsFilterPrice.PageNumber, productsFilterPrice.PageSize);
+            var filteredProducts = products.ToPagedListAsync(productsFilterPrice.PageNumber, productsFilterPrice.PageSize);
 
-            return filteredProducts;
+            return await filteredProducts;
         }
 
         public async Task<IEnumerable<Product>> GetProductsByCategoryAsync(int categoryid)

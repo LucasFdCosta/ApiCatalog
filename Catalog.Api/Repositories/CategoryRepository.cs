@@ -6,6 +6,7 @@ using Catalog.Api.Context;
 using Catalog.Api.Domain;
 using Catalog.Api.Pagination;
 using Microsoft.EntityFrameworkCore;
+using X.PagedList;
 
 namespace Catalog.Api.Repositories
 {
@@ -15,18 +16,19 @@ namespace Catalog.Api.Repositories
         {
         }
 
-        public async Task<PagedList<Category>> GetCategoriesAsync(CategoriesParameters categoriesParams)
+        public async Task<IPagedList<Category>> GetCategoriesAsync(CategoriesParameters categoriesParams)
         {
             var categories = await GetAllAsync();
 
             var orderedCategories = categories.OrderBy(c => c.Id).AsQueryable();
 
-            var result = PagedList<Category>.ToPagedList(orderedCategories, categoriesParams.PageNumber, categoriesParams.PageSize);
-
+            // var result = PagedList<Category>.ToPagedList(orderedCategories, categoriesParams.PageNumber, categoriesParams.PageSize);
+            var result = await orderedCategories.ToPagedListAsync(categoriesParams.PageNumber, categoriesParams.PageSize);
+            
             return result;
         }
 
-        public async Task<PagedList<Category>> GetCategoriesFilterNameAsync(CategoriesFilterName categoriesFilterName)
+        public async Task<IPagedList<Category>> GetCategoriesFilterNameAsync(CategoriesFilterName categoriesFilterName)
         {
             var categories = await GetAllAsync();
 
@@ -35,7 +37,8 @@ namespace Catalog.Api.Repositories
                 categories = categories.Where(c => c.Name.Contains(categoriesFilterName.Name));
             }
 
-            var filteredCategories = PagedList<Category>.ToPagedList(categories.AsQueryable(), categoriesFilterName.PageNumber, categoriesFilterName.PageSize);
+            // var filteredCategories = PagedList<Category>.ToPagedList(categories.AsQueryable(), categoriesFilterName.PageNumber, categoriesFilterName.PageSize);
+            var filteredCategories = await categories.ToPagedListAsync(categoriesFilterName.PageNumber, categoriesFilterName.PageSize);
 
             return filteredCategories;
         }

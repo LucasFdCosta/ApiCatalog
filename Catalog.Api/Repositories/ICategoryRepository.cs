@@ -4,12 +4,13 @@ using System.Linq;
 using System.Threading.Tasks;
 using Catalog.Api.Domain;
 using Catalog.Api.Pagination;
+using X.PagedList;
 
 namespace Catalog.Api.Repositories
 {
     public interface ICategoryRepository : IRepository<Category>
     {
-        Task<PagedList<Category>> GetCategoriesAsync(CategoriesParameters categoriesParameters);
-        Task<PagedList<Category>> GetCategoriesFilterNameAsync(CategoriesFilterName categoriesFilterName);
+        Task<IPagedList<Category>> GetCategoriesAsync(CategoriesParameters categoriesParameters);
+        Task<IPagedList<Category>> GetCategoriesFilterNameAsync(CategoriesFilterName categoriesFilterName);
     }
 }

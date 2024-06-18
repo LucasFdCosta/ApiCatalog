@@ -12,7 +12,7 @@ Content-Type: application/json
 
 ###
 
-GET {{apiUrl}}/products/filter/price/pagination?priceCriterion=eqa&price=10
+GET {{apiUrl}}/products/filter/price/pagination?priceCriterion=gt&price=10
 Accept: application/json
 Content-Type: application/json
 
@@ -76,7 +76,7 @@ Content-Type: application/json
 
 ###
 
-GET {{apiUrl}}/category/filter/name/pagination?name=food
+GET {{apiUrl}}/category/filter/name/pagination?name=cat
 Accept: application/json
 Content-Type: application/json
 
