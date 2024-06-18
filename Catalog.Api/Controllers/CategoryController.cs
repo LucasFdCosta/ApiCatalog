@@ -33,11 +33,11 @@ public class CategoryController : ControllerBase
 
     [HttpGet]
     [ServiceFilter(typeof(ApiLoggingFilter))]
-    public ActionResult<IEnumerable<CategoryDTO>> Get()
+    public async Task<ActionResult<IEnumerable<CategoryDTO>>> Get()
     {
         _ilogger.LogInformation($"============= GET api/category ===============");
         
-        var categories = _uof.CategoryRepository.GetAll();
+        var categories = await _uof.CategoryRepository.GetAllAsync();
 
         var categoriesDto = categories.ToCategoryDTOList();
 
@@ -45,17 +45,17 @@ public class CategoryController : ControllerBase
     }
 
     [HttpGet("pagination")]
-    public ActionResult<IEnumerable<CategoryDTO>> Get([FromQuery] CategoriesParameters categoriesParams)
+    public async Task<ActionResult<IEnumerable<CategoryDTO>>> Get([FromQuery] CategoriesParameters categoriesParams)
     {
-        var categories = _uof.CategoryRepository.GetCategories(categoriesParams);
+        var categories = await _uof.CategoryRepository.GetCategoriesAsync(categoriesParams);
 
         return GetCategories(categories);
     }
 
     [HttpGet("filter/name/pagination")]
-    public ActionResult<IEnumerable<CategoryDTO>> GetCategoriesFilterName([FromQuery] CategoriesFilterName categoriesFilterName)
+    public async Task<ActionResult<IEnumerable<CategoryDTO>>> GetCategoriesFilterName([FromQuery] CategoriesFilterName categoriesFilterName)
     {
-        var filteredCategories = _uof.CategoryRepository.GetCategoriesFilterName(categoriesFilterName);
+        var filteredCategories = await _uof.CategoryRepository.GetCategoriesFilterNameAsync(categoriesFilterName);
 
         return GetCategories(filteredCategories);
     }
@@ -80,11 +80,11 @@ public class CategoryController : ControllerBase
     }
 
     [HttpGet("{id:int}", Name = "GetCategory")]
-    public ActionResult<CategoryDTO> GetById(int id)
+    public async Task<ActionResult<CategoryDTO>> GetById(int id)
     {
         _ilogger.LogInformation($"============= GET api/category/id {id} ===============");
         
-        var category = _uof.CategoryRepository.Get(c => c.Id == id);
+        var category = await _uof.CategoryRepository.GetAsync(c => c.Id == id);
 
         if (category is null) return NotFound($"Category {id} not found...");
 
@@ -94,14 +94,14 @@ public class CategoryController : ControllerBase
     }
 
     [HttpPost]
-    public ActionResult<CategoryDTO> Post(CategoryDTO categoryDto)
+    public async Task<ActionResult<CategoryDTO>> Post(CategoryDTO categoryDto)
     {
         if (categoryDto is null) return BadRequest("Invalid data.");
 
         var category = categoryDto.ToCategory();
 
         var created = _uof.CategoryRepository.Create(category);
-        _uof.Commit();
+        await _uof.CommitAsync();
 
         var newCategoryDto = created.ToCategoryDTO();
 
@@ -109,14 +109,14 @@ public class CategoryController : ControllerBase
     }
 
     [HttpPut("{id:int}")]
-    public ActionResult<CategoryDTO> Put(int id, CategoryDTO categoryDto)
+    public async Task<ActionResult<CategoryDTO>> Put(int id, CategoryDTO categoryDto)
     {
         if (id != categoryDto.Id) return BadRequest("Invalid ID");
         
         var category = categoryDto.ToCategory();
 
         var updated = _uof.CategoryRepository.Update(category);
-        _uof.Commit();
+        await _uof.CommitAsync();
 
         var updatedCategoryDto = updated.ToCategoryDTO();
 
@@ -124,14 +124,14 @@ public class CategoryController : ControllerBase
     }
 
     [HttpDelete("{id:int}")]
-    public ActionResult<CategoryDTO> Delete(int id)
+    public async Task<ActionResult<CategoryDTO>> Delete(int id)
     {
-        var category = _uof.CategoryRepository.Get(c => c.Id == id);
+        var category = await _uof.CategoryRepository.GetAsync(c => c.Id == id);
 
         if (category is null) return NotFound("Category not found!");
 
         var deleted = _uof.CategoryRepository.Delete(category);
-        _uof.Commit();
+        await _uof.CommitAsync();
         
         var deletedCategoryDto = deleted.ToCategoryDTO();
 
