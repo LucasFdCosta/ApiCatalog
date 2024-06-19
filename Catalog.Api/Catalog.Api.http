@@ -1,5 +1,8 @@
 @apiUrl = https://localhost:7018
 
+//todo: generate token
+@token = mytoken
+
 GET {{apiUrl}}/products
 Accept: application/json
 Content-Type: application/json
@@ -67,6 +70,7 @@ Content-Type: application/json
 GET {{apiUrl}}/category/
 Accept: application/json
 Content-Type: application/json
+Authorization: Bearer {{token}}
 
 ###
 
