@@ -3,6 +3,7 @@ using System.Security.Claims;
 using Catalog.Api.Domain;
 using Catalog.Api.DTOs;
 using Catalog.Api.Services;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 
@@ -144,5 +145,21 @@ public class AuthController : ControllerBase
             accessToken = new JwtSecurityTokenHandler().WriteToken(newAccessToken),
             refreshToken = newRefreshToken
         });
+    }
+
+    [Authorize]
+    [HttpPost]
+    [Route("revoke/{username}")]
+    public async Task<IActionResult> Revoke(string username)
+    {
+        var user = await _userManager.FindByNameAsync(username);
+
+        if (user == null) return BadRequest("Invalid username");
+
+        user.RefreshToken = null;
+
+        await _userManager.UpdateAsync(user);
+
+        return NoContent();
     }
 }

@@ -8,7 +8,7 @@ namespace Catalog.Api.Domain
 {
     public class ApplicationUser : IdentityUser
     {
-        public string RefreshToken { get; set; } = string.Empty;
+        public string? RefreshToken { get; set; }
         public DateTime RefreshTokenExpiryTime { get; set; }
     }
 }
