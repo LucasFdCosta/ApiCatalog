@@ -1,5 +1,4 @@
-﻿using Catalog.Api.Context;
-using Catalog.Api.Domain;
+﻿using Catalog.Api.Domain;
 using Catalog.Api.DTOs;
 using Catalog.Api.DTOs.Mappings;
 using Catalog.Api.Filters;
@@ -8,7 +7,6 @@ using Catalog.Api.Repositories;
 using Catalog.Api.Services;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
 using Newtonsoft.Json;
 using X.PagedList;
 
