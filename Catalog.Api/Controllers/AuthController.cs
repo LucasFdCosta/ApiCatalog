@@ -46,6 +46,7 @@ public class AuthController : ControllerBase
             {
                 new Claim(ClaimTypes.Name, user.UserName!),
                 new Claim(ClaimTypes.Email, user.Email!),
+                new Claim("id", user.UserName!),
                 new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()),
             };
     
@@ -215,7 +216,7 @@ public class AuthController : ControllerBase
                     new ResponseDTO { Status = "Error", Message = $"Error: Unable to add user {user.Email} to the {roleName} role" });
             }
         }
-        
+
         return BadRequest(new { error = "Unable to find user" });
     }
 }
