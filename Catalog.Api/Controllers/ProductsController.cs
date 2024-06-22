@@ -5,6 +5,7 @@ using Catalog.Api.DTOs;
 using Catalog.Api.DTOs.Mappings;
 using Catalog.Api.Pagination;
 using Catalog.Api.Repositories;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.JsonPatch;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -26,6 +27,7 @@ public class ProductsController : ControllerBase
         _mapper = mapper;
     }
 
+    [Authorize]
     [HttpGet]
     public async Task<ActionResult<IEnumerable<ProductDTO>>> Get()
     {
