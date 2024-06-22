@@ -29,8 +29,8 @@ namespace Catalog.Api.Logging
         public void Log<TState>(LogLevel logLevel, EventId eventId, TState state, Exception? exception, Func<TState, Exception?, string> formatter)
         {
             string message = $"{logLevel.ToString()}: {eventId.Id} = {formatter(state, exception)}";
-
-            WriteTextOnFile(message);
+            
+            // WriteTextOnFile(message);
         }
 
         private void WriteTextOnFile(string message)
