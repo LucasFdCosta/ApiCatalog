@@ -15,7 +15,7 @@ namespace Catalog.Api.Migrations
                 name: "RefreshToken",
                 table: "AspNetUsers",
                 type: "longtext",
-                nullable: false)
+                nullable: true)
                 .Annotation("MySql:CharSet", "utf8mb4");
 
             migrationBuilder.AddColumn<DateTime>(

@@ -12,7 +12,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Catalog.Api.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20240619224405_AddApplicationUserEntity")]
+    [Migration("20240622155356_AddApplicationUserEntity")]
     partial class AddApplicationUserEntity
     {
         /// <inheritdoc />
@@ -68,7 +68,6 @@ namespace Catalog.Api.Migrations
                         .HasColumnType("tinyint(1)");
 
                     b.Property<string>("RefreshToken")
-                        .IsRequired()
                         .HasColumnType("longtext");
 
                     b.Property<DateTime>("RefreshTokenExpiryTime")
