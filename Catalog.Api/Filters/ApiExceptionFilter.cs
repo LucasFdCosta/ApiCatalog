@@ -20,7 +20,11 @@ namespace Catalog.Api.Filters
         {
             _logger.LogError(context.Exception, "An unhandled exception occurred: Status code 500");
 
-            context.Result = new ObjectResult("A problem occurred while handling your request: Status code 500")
+            context.Result = new ObjectResult(new
+            {
+                Message = "A problem occurred while handling your request: Status code 500",
+                Error = context.Exception.Message,
+            })
             {
                 StatusCode = StatusCodes.Status500InternalServerError
             };
