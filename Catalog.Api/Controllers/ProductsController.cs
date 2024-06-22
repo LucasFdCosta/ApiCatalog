@@ -27,7 +27,7 @@ public class ProductsController : ControllerBase
         _mapper = mapper;
     }
 
-    [Authorize]
+    [Authorize(Policy = "UserOnly")]
     [HttpGet]
     public async Task<ActionResult<IEnumerable<ProductDTO>>> Get()
     {
