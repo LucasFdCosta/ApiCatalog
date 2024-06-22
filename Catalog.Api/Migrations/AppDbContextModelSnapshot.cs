@@ -65,7 +65,6 @@ namespace Catalog.Api.Migrations
                         .HasColumnType("tinyint(1)");
 
                     b.Property<string>("RefreshToken")
-                        .IsRequired()
                         .HasColumnType("longtext");
 
                     b.Property<DateTime>("RefreshTokenExpiryTime")
