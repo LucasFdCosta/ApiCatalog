@@ -6,12 +6,14 @@ using Catalog.Api.Pagination;
 using Catalog.Api.Repositories;
 using Catalog.Api.Services;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
 using X.PagedList;
 
 namespace Catalog.Api.Controllers;
 
+[EnableCors(PolicyName = "allowedOrigins")]
 [Route("[controller]")]
 [ApiController]
 public class CategoryController : ControllerBase
@@ -80,6 +82,7 @@ public class CategoryController : ControllerBase
         return Ok(categoriesDto);
     }
 
+    [DisableCors]
     [HttpGet("{id:int}", Name = "GetCategory")]
     public async Task<ActionResult<CategoryDTO>> GetById(int id)
     {

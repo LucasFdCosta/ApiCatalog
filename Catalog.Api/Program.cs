@@ -28,16 +28,15 @@ builder.Services.AddControllers(options =>
 }).AddNewtonsoftJson();
 
 // Named CORS policy
-var allowedOrigins = "_allowedOrigins";
+//var allowedOrigins = "_allowedOrigins";
 
 builder.Services.AddCors(options =>
-    options.AddPolicy(name: allowedOrigins,
+    options.AddPolicy(name: "allowedOrigins",
         policy =>
         {
-            policy.WithOrigins("https://apirequest.io"/*, "http://localhost:5173"*/) // it is possible to allow more than 1 origin
+            policy.WithOrigins("http://localhost:5173")
                 .WithMethods("GET", "POST")
-                .AllowAnyHeader()
-                .AllowCredentials();
+                .AllowAnyHeader();
         })
 );
 
@@ -160,7 +159,7 @@ app.UseHttpsRedirection();
 // Default CORS policy (no name required)
 //app.UseCors();
 // Named CORS policy
-app.UseCors(allowedOrigins);
+app.UseCors();
 
 app.UseAuthorization();
 
