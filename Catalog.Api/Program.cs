@@ -27,6 +27,31 @@ builder.Services.AddControllers(options =>
     options.JsonSerializerOptions.ReferenceHandler = ReferenceHandler.IgnoreCycles;
 }).AddNewtonsoftJson();
 
+// Named CORS policy
+var allowedOrigins = "_allowedOrigins";
+
+builder.Services.AddCors(options =>
+    options.AddPolicy(name: allowedOrigins,
+        policy =>
+        {
+            policy.WithOrigins("https://apirequest.io"/*, "http://localhost:5173"*/) // it is possible to allow more than 1 origin
+                .WithMethods("GET", "POST")
+                .AllowAnyHeader()
+                .AllowCredentials();
+        })
+);
+
+// Default CORS policy (no name required)
+//builder.Services.AddCors(options =>
+//    options.AddDefaultPolicy(policy =>
+//        {
+//            policy.WithOrigins("https://apirequest.io")
+//                .WithMethods("GET", "POST")
+//                .AllowAnyHeader()
+//                .AllowCredentials();
+//        })
+//);
+
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen(c =>
@@ -131,6 +156,11 @@ if (app.Environment.IsDevelopment())
 }
 
 app.UseHttpsRedirection();
+
+// Default CORS policy (no name required)
+//app.UseCors();
+// Named CORS policy
+app.UseCors(allowedOrigins);
 
 app.UseAuthorization();
 
