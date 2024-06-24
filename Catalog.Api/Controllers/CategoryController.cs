@@ -8,12 +8,14 @@ using Catalog.Api.Services;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.RateLimiting;
 using Newtonsoft.Json;
 using X.PagedList;
 
 namespace Catalog.Api.Controllers;
 
 [EnableCors(PolicyName = "allowedOrigins")]
+[EnableRateLimiting(policyName: "fixedwindow")]
 [Route("[controller]")]
 [ApiController]
 public class CategoryController : ControllerBase
@@ -36,6 +38,7 @@ public class CategoryController : ControllerBase
     [HttpGet]
     [Authorize]
     [ServiceFilter(typeof(ApiLoggingFilter))]
+    [DisableRateLimiting]
     public async Task<ActionResult<IEnumerable<CategoryDTO>>> Get()
     {
         _ilogger.LogInformation($"============= GET api/category ===============");
