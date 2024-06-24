@@ -84,6 +84,7 @@ builder.Services.AddSwaggerGen(c =>
     });
 });
 
+// custom rate limiter
 builder.Services.AddRateLimiter(rateLimiterOptions =>
 {
     rateLimiterOptions.AddFixedWindowLimiter(policyName: "fixedwindow", options =>
@@ -94,6 +95,22 @@ builder.Services.AddRateLimiter(rateLimiterOptions =>
         options.QueueProcessingOrder = QueueProcessingOrder.OldestFirst;
     });
     rateLimiterOptions.RejectionStatusCode = StatusCodes.Status429TooManyRequests;
+});
+
+// global rate limiter
+builder.Services.AddRateLimiter(options =>
+{
+    options.RejectionStatusCode = StatusCodes.Status429TooManyRequests;
+    options.GlobalLimiter = PartitionedRateLimiter.Create<HttpContext, string>(httpContext =>
+                            RateLimitPartition.GetFixedWindowLimiter(
+                                partitionKey: httpContext.User.Identity?.Name ?? httpContext.Request.Headers.Host.ToString(),
+                                factory: partition => new FixedWindowRateLimiterOptions
+                                {
+                                    AutoReplenishment = true,
+                                    PermitLimit = 5,
+                                    QueueLimit = 0,
+                                    Window = TimeSpan.FromSeconds(10),
+                                }));
 });
 
 builder.Services.AddIdentity<ApplicationUser, IdentityRole>()
@@ -176,7 +193,6 @@ app.UseRateLimiter();
 //app.UseCors();
 // Named CORS policy
 app.UseCors();
-
 
 app.UseAuthorization();
 

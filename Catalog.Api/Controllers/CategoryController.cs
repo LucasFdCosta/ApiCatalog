@@ -15,7 +15,7 @@ using X.PagedList;
 namespace Catalog.Api.Controllers;
 
 [EnableCors(PolicyName = "allowedOrigins")]
-[EnableRateLimiting(policyName: "fixedwindow")]
+//[EnableRateLimiting(policyName: "fixedwindow")]
 [Route("[controller]")]
 [ApiController]
 public class CategoryController : ControllerBase
@@ -38,7 +38,7 @@ public class CategoryController : ControllerBase
     [HttpGet]
     [Authorize]
     [ServiceFilter(typeof(ApiLoggingFilter))]
-    [DisableRateLimiting]
+    //[DisableRateLimiting]
     public async Task<ActionResult<IEnumerable<CategoryDTO>>> Get()
     {
         _ilogger.LogInformation($"============= GET api/category ===============");
