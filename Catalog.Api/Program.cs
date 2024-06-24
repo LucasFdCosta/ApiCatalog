@@ -1,3 +1,4 @@
+using Catalog.Api;
 using Catalog.Api.Context;
 using Catalog.Api.Domain;
 using Catalog.Api.DTOs.Mappings;
@@ -84,34 +85,38 @@ builder.Services.AddSwaggerGen(c =>
     });
 });
 
+var myOptions = new MyRateLimitOptions();
+
+builder.Configuration.GetSection(MyRateLimitOptions.MyRateLimit).Bind(myOptions);
+
 // custom rate limiter
 builder.Services.AddRateLimiter(rateLimiterOptions =>
 {
     rateLimiterOptions.AddFixedWindowLimiter(policyName: "fixedwindow", options =>
     {
-        options.PermitLimit = 1;
-        options.Window = TimeSpan.FromSeconds(5);
-        options.QueueLimit = 2;
+        options.PermitLimit = myOptions.PermitLimit; //1;
+        options.Window = TimeSpan.FromSeconds(myOptions.Window);
+        options.QueueLimit = myOptions.QueueLimit; //2;
         options.QueueProcessingOrder = QueueProcessingOrder.OldestFirst;
     });
     rateLimiterOptions.RejectionStatusCode = StatusCodes.Status429TooManyRequests;
 });
 
 // global rate limiter
-builder.Services.AddRateLimiter(options =>
-{
-    options.RejectionStatusCode = StatusCodes.Status429TooManyRequests;
-    options.GlobalLimiter = PartitionedRateLimiter.Create<HttpContext, string>(httpContext =>
-                            RateLimitPartition.GetFixedWindowLimiter(
-                                partitionKey: httpContext.User.Identity?.Name ?? httpContext.Request.Headers.Host.ToString(),
-                                factory: partition => new FixedWindowRateLimiterOptions
-                                {
-                                    AutoReplenishment = true,
-                                    PermitLimit = 5,
-                                    QueueLimit = 0,
-                                    Window = TimeSpan.FromSeconds(10),
-                                }));
-});
+//builder.Services.AddRateLimiter(options =>
+//{
+//    options.RejectionStatusCode = StatusCodes.Status429TooManyRequests;
+//    options.GlobalLimiter = PartitionedRateLimiter.Create<HttpContext, string>(httpContext =>
+//                            RateLimitPartition.GetFixedWindowLimiter(
+//                                partitionKey: httpContext.User.Identity?.Name ?? httpContext.Request.Headers.Host.ToString(),
+//                                factory: partition => new FixedWindowRateLimiterOptions
+//                                {
+//                                    AutoReplenishment = true,
+//                                    PermitLimit = 5,
+//                                    QueueLimit = 0,
+//                                    Window = TimeSpan.FromSeconds(10),
+//                                }));
+//});
 
 builder.Services.AddIdentity<ApplicationUser, IdentityRole>()
     .AddEntityFrameworkStores<AppDbContext>()
