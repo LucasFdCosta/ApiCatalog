@@ -26,6 +26,10 @@ public class ProductsController : ControllerBase
         _mapper = mapper;
     }
 
+    /// <summary>
+    /// Get all products
+    /// </summary>
+    /// <returns>A list of all products</returns>
     //[Authorize(Policy = "UserOnly")]
     [HttpGet]
     public async Task<ActionResult<IEnumerable<ProductDTO>>> Get()
@@ -74,6 +78,11 @@ public class ProductsController : ControllerBase
         return Ok(productsDto);
     }
 
+    /// <summary>
+    /// Get a product by a given id
+    /// </summary>
+    /// <param name="id">The product id</param>
+    /// <returns>An object with the given id</returns>
     [HttpGet("{id:int:min(1)}", Name = "GetProduct")]
     public async Task<ActionResult<ProductDTO>> GetById(int id)
     {

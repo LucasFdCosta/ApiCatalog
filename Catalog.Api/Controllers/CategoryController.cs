@@ -36,6 +36,10 @@ public class CategoryController : ControllerBase
         return Ok(service.Hello(name));
     }
 
+    /// <summary>
+    /// Get all categories
+    /// </summary>
+    /// <returns>A list of all categories</returns>
     [HttpGet]
     [Authorize]
     [ServiceFilter(typeof(ApiLoggingFilter))]
@@ -51,6 +55,11 @@ public class CategoryController : ControllerBase
         return Ok(categoriesDto);
     }
 
+    /// <summary>
+    /// Get all categories with pagination
+    /// </summary>
+    /// <param name="categoriesParams">The pagination parameters</param>
+    /// <returns>All categories separated by pages</returns>
     [HttpGet("pagination")]
     public async Task<ActionResult<IEnumerable<CategoryDTO>>> Get([FromQuery] CategoriesParameters categoriesParams)
     {
@@ -59,6 +68,11 @@ public class CategoryController : ControllerBase
         return GetCategories(categories);
     }
 
+    /// <summary>
+    /// Get all categories by name with pagination
+    /// </summary>
+    /// <param name="categoriesFilterName">The name and the pagination parameters</param>
+    /// <returns>All categories with the given name, separated by pages</returns>
     [HttpGet("filter/name/pagination")]
     public async Task<ActionResult<IEnumerable<CategoryDTO>>> GetCategoriesFilterName([FromQuery] CategoriesFilterName categoriesFilterName)
     {
@@ -86,6 +100,11 @@ public class CategoryController : ControllerBase
         return Ok(categoriesDto);
     }
 
+    /// <summary>
+    /// Get a category by id
+    /// </summary>
+    /// <param name="id">The category id</param>
+    /// <returns>A single category with the given id</returns>
     [DisableCors]
     [HttpGet("{id:int}", Name = "GetCategory")]
     public async Task<ActionResult<CategoryDTO>> GetById(int id)
@@ -101,6 +120,20 @@ public class CategoryController : ControllerBase
         return Ok(categoryDto);
     }
 
+    /// <summary>
+    /// Creates a new category
+    /// </summary>
+    /// <remarks>
+    ///     Request example:
+    ///     POST api/v1/categories
+    ///     {
+    ///         "name": "category9",
+    ///         "imageUrl": "category9.jpg"
+    ///     }
+    /// </remarks>
+    /// <param name="categoryDto">An category object</param>
+    /// <returns>The created category</returns>
+    /// <remarks>Returns the created category</remarks>
     [HttpPost]
     public async Task<ActionResult<CategoryDTO>> Post(CategoryDTO categoryDto)
     {

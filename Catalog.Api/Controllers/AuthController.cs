@@ -34,6 +34,12 @@ public class AuthController : ControllerBase
         _ilogger = ilogger;
     }
 
+
+    /// <summary>
+    /// Checks an user credentials
+    /// </summary>
+    /// <param name="model">The user's username and password</param>
+    /// <returns>Status code 200, the token and its expiration time and the refresh token</returns>
     [HttpPost]
     [Route("login")]
     public async Task<IActionResult> Login([FromBody] LoginModelDTO model)
@@ -80,6 +86,12 @@ public class AuthController : ControllerBase
         return Unauthorized();
     }
 
+    /// <summary>
+    /// Register a new user
+    /// </summary>
+    /// <param name="model">A RegisterModelDTO object</param>
+    /// <returns>An ResponseDTO object</returns>
+    /// <remarks>Returns a successfull or failure ResponseDTO object</remarks>
     [HttpPost]
     [Route("register")]
     public async Task<IActionResult> Register([FromBody] RegisterModelDTO model)
