@@ -1,4 +1,5 @@
-﻿using Catalog.Api.Domain;
+﻿using Asp.Versioning;
+using Catalog.Api.Domain;
 using Catalog.Api.DTOs;
 using Catalog.Api.DTOs.Mappings;
 using Catalog.Api.Filters;
@@ -13,10 +14,11 @@ using X.PagedList;
 
 namespace Catalog.Api.Controllers;
 
+[ApiController]
+[ApiVersion("1.0")]
+[Route("api/v{version:apiVersion}/[controller]")]
 [EnableCors(PolicyName = "allowedOrigins")]
 //[EnableRateLimiting(policyName: "fixedwindow")]
-[Route("[controller]")]
-[ApiController]
 public class CategoryController : ControllerBase
 {
     private readonly IUnitOfWork _uof;

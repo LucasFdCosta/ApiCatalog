@@ -1,21 +1,20 @@
-﻿using AutoMapper;
-using Catalog.Api.Context;
+﻿using Asp.Versioning;
+using AutoMapper;
 using Catalog.Api.Domain;
 using Catalog.Api.DTOs;
-using Catalog.Api.DTOs.Mappings;
 using Catalog.Api.Pagination;
 using Catalog.Api.Repositories;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.JsonPatch;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
 using Newtonsoft.Json;
 using X.PagedList;
 
 namespace Catalog.Api.Controllers;
 
-[Route("[controller]")]
 [ApiController]
+[ApiVersion("1.0")]
+[Route("api/v{version:apiVersion}/[controller]")]
 public class ProductsController : ControllerBase
 {
     private readonly IUnitOfWork _uof;
@@ -27,7 +26,7 @@ public class ProductsController : ControllerBase
         _mapper = mapper;
     }
 
-    [Authorize(Policy = "UserOnly")]
+    //[Authorize(Policy = "UserOnly")]
     [HttpGet]
     public async Task<ActionResult<IEnumerable<ProductDTO>>> Get()
     {
