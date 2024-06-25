@@ -18,6 +18,7 @@ namespace Catalog.Api.Controllers;
 [ApiVersion("1.0")]
 [Route("api/v{version:apiVersion}/[controller]")]
 [EnableCors(PolicyName = "allowedOrigins")]
+[Produces("application/json")]
 //[EnableRateLimiting(policyName: "fixedwindow")]
 public class CategoryController : ControllerBase
 {
@@ -107,6 +108,8 @@ public class CategoryController : ControllerBase
     /// <returns>A single category with the given id</returns>
     [DisableCors]
     [HttpGet("{id:int}", Name = "GetCategory")]
+    [ProducesResponseType(typeof(CategoryDTO), StatusCodes.Status200OK)]
+    [ProducesResponseType(typeof(string), StatusCodes.Status404NotFound)]
     public async Task<ActionResult<CategoryDTO>> GetById(int id)
     {
         _ilogger.LogInformation($"============= GET api/category/id {id} ===============");
