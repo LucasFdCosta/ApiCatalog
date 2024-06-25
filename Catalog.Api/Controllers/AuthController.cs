@@ -122,6 +122,7 @@ public class AuthController : ControllerBase
         return Ok(new ResponseDTO { Status = "Success", Message = "User created successfully!" });
     }
 
+    #pragma warning disable CS1591
     [HttpPost]
     [Route("refresh-token")]
     public async Task<IActionResult> RefreshToken(TokenModelDTO model)
@@ -164,6 +165,7 @@ public class AuthController : ControllerBase
             refreshToken = newRefreshToken
         });
     }
+    #pragma warning restore CS1591
 
     [HttpPost]
     [Route("revoke/{username}")]
