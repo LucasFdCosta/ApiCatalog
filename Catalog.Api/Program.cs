@@ -59,7 +59,19 @@ builder.Services.AddCors(options =>
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen(c =>
 {
-    c.SwaggerDoc("v1", new OpenApiInfo { Title = "catalogapi", Version = "v1"});
+    c.SwaggerDoc("v1", new OpenApiInfo
+    {
+        Version = "v1",
+        Title = "catalogapi",
+        Description = "Products and its categories API",
+        // TermsOfService = new Uri(),
+        Contact = new OpenApiContact
+        {
+            Name = "Lucas",
+            Email = "lucas.co090869@gmail.com",
+            Url = new Uri("https://github.com/LucasFdCosta")
+        },
+    });
 
     c.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme()
     {
