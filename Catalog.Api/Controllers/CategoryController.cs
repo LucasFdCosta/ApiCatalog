@@ -138,6 +138,9 @@ public class CategoryController : ControllerBase
     /// <returns>The created category</returns>
     /// <remarks>Returns the created category</remarks>
     [HttpPost]
+    [ProducesResponseType(typeof(CategoryDTO), StatusCodes.Status201Created)]
+    [ProducesResponseType(typeof(string), StatusCodes.Status400BadRequest)]
+    [ProducesDefaultResponseType]
     public async Task<ActionResult<CategoryDTO>> Post(CategoryDTO categoryDto)
     {
         if (categoryDto is null) return BadRequest("Invalid data.");
