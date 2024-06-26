@@ -8,8 +8,8 @@ namespace Catalog.UnitTests.UnitTests
 {
     public class ProductsUnitTestController
     {
-        private IUnitOfWork repository;
-        private IMapper mapper;
+        public IUnitOfWork repository;
+        public IMapper mapper;
         public static DbContextOptions<AppDbContext> dbContextOptions { get; }
 
         public static string connectionString = "Server=localhost;DataBase=CatalogDB;Uid=root;Pwd=admin";
