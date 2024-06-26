@@ -15,6 +15,7 @@ namespace Catalog.Api.Controllers;
 [ApiController]
 [ApiVersion("1.0")]
 [Route("api/v{version:apiVersion}/[controller]")]
+[ApiConventionType(typeof(DefaultApiConventions))]
 public class ProductsController : ControllerBase
 {
     private readonly IUnitOfWork _uof;
