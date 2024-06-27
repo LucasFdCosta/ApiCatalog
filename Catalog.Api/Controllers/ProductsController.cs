@@ -9,6 +9,7 @@ using Microsoft.AspNetCore.JsonPatch;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
 using X.PagedList;
+using Microsoft.AspNetCore.Http;
 
 namespace Catalog.Api.Controllers;
 
@@ -33,6 +34,8 @@ public class ProductsController : ControllerBase
     /// <returns>A list of all products</returns>
     //[Authorize(Policy = "UserOnly")]
     [HttpGet]
+    [ProducesResponseType(typeof(IEnumerable<ProductDTO>), StatusCodes.Status200OK)]
+    [ProducesResponseType(typeof(string), StatusCodes.Status404NotFound)]
     public async Task<ActionResult<IEnumerable<ProductDTO>>> Get()
     {
         var products = await _uof.ProductRepository.GetAllAsync();
