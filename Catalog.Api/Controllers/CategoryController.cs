@@ -42,7 +42,7 @@ public class CategoryController : ControllerBase
     /// </summary>
     /// <returns>A list of all categories</returns>
     [HttpGet]
-    [Authorize]
+    //[Authorize]
     [ServiceFilter(typeof(ApiLoggingFilter))]
     //[DisableRateLimiting]
     public async Task<ActionResult<IEnumerable<CategoryDTO>>> Get()
